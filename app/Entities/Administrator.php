@@ -8,7 +8,7 @@ protected bool $isSuperAdmin;
     $this->isSuperAdmin=$isSuperAdmin;
 }
 public function getisSuperAdmin(){
-    return $this->isSuperAdmin;
+    return $this->isSuperAdmin ;
 }
 }
 
