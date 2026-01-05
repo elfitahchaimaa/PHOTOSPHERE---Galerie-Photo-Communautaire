@@ -1,6 +1,7 @@
 <?php
 require_once __DIR__.'/BasicUser.php';
 class ProUser extends BasicUser{
+    protected ?int $limit;
     protected DateTime $subscriptionStart;
     protected DateTime $subscriptionEnd;
 

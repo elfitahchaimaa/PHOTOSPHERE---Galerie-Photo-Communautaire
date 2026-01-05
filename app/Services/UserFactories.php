@@ -1,12 +1,12 @@
 <?php
-    require_once __DIR__.'/../Entities/User.php';
-    require_once __DIR__.'/../Entities/BasicUser.php';
-    require_once __DIR__.'/../Entities/ProUser.php';
-    require_once __DIR__.'/../Entities/Moderator.php';
-    require_once __DIR__.'/../Entities/Administrator.php';
+    require_once __DIR__.'../Entities/User.php';
+    require_once __DIR__.'../Entities/BasicUser.php';
+    require_once __DIR__.'../Entities/ProUser.php';
+    require_once __DIR__.'../Entities/Moderator.php';
+    require_once __DIR__.'../Entities/Administrator.php';
 
     class UserFactory {
-        public function checkrole($row){
+        public static function checkrole($row){
         if($row['role']=='BasicUser')
         {
             $user=new BasicUser($row['username'],$row['email'],$row['passworde'],$row['urlphoto'],$row['biographie'],$row['uploadCount']);

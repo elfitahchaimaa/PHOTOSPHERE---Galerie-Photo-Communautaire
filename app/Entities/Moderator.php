@@ -1,20 +1,15 @@
 <?php
 require_once __DIR__.'/User.php';
-class BasicUser extends User{
-protected int $uploadCount=0;
-protected ?int $limit=10;
+class Moderator extends User {
+    protected string $level;
 
-public function __construct($username,$email,$passworde,$urlphoto=null,$biographie=null,$uploadCount=0)
-{ 
-    parent::__construct($username,$email,$passworde,$urlphoto,$biographie);
-    $this->uploadCount=$uploadCount;
+public function __construct($username,$email,$passworde,$urlphoto=null,$biographie=null,$level='junior')
+{ parent::__construct($username,$email,$passworde,$urlphoto,$biographie);
+  return $this->level=$level;
+}
+public function getlevel(){
+   return  $this->level;
+}
 }
 
-public function getuploadCount(){
-    return $this->uploadCount;
-}
-
-
-
-}
 ?>

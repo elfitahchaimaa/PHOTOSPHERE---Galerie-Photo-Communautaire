@@ -6,6 +6,7 @@ require_once __DIR__.'/../Entities/BasicUser.php';
 require_once __DIR__.'/../Entities/ProUser.php';
 require_once __DIR__.'/../Entities/Moderator.php';
 require_once __DIR__.'/../Entities/Administrator.php';
+require_once __DIR__.'/../Services/UserFactories.php';
 
 class UserRepo implements RepositoryInterface {
     protected PDO $pdo;
@@ -36,7 +37,7 @@ class UserRepo implements RepositoryInterface {
         return null;
     }}
     public function update($user):bool{
-                $stmt=$this->pdo->prepare("update utilisateur set username=:username,email=:email,passworde=:passworde,urlphoto=:urlphoto,biographie=:biographie where id_user=:id_user");
+                $stmt=$this->pdo->prepare("update users set username=:username,email=:email,passworde=:passworde,urlphoto=:urlphoto,biographie=:biographie where id_user=:id_user");
                 return $stmt->execute([
                     'username'=>$user->getusername(),
                     'email'=>$user->getemail(),
@@ -48,7 +49,7 @@ class UserRepo implements RepositoryInterface {
 }
 
 public function delete($user):bool{
-        $stmt=$this->pdo->prepare("delete from utilisateur where id_user=:id");
+        $stmt=$this->pdo->prepare("delete from users where id_user=:id");
         return $stmt->execute(['id'=>$user->getid()]);
 }
 }
