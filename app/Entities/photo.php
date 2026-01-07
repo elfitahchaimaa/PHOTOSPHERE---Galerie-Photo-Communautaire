@@ -44,6 +44,7 @@ class Photo implements Taggable, Commentable, Likeable
         return $this->commentCount;
     }
 
+
     public function removeComment(int $commentId): bool
     {
         if ($this->commentCount > 0) {

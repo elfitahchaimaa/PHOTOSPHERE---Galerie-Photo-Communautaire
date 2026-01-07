@@ -31,6 +31,11 @@ trait TaggableTrait{
 
 
     }
+    public function clearTags(): void
+{
+    $this->tags = []; 
+}
+
 
     public function removeTag(string $tag):void{
         $this->loadTgsIfNeeded();
