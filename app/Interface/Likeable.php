@@ -1,5 +1,7 @@
 <?php
 
+namespace App\Interface;
+
 interface Likeable
 {
     public function addLike(int $userId): bool;

@@ -1,54 +1,64 @@
-<?php 
-abstract class User{
-protected int $id_user;
-protected string $username;
-protected string $email;
-protected string $passworde;
-protected DateTime $createAt;
-protected ?DateTime $lastLogin;
-protected ?string $urlphoto=null;
-protected ?string $biographie=null;
+<?php
 
-public function __construct($username,$email,$passworde,$urlphoto=null,$biographie=null)
-{  
-    $this->username=$username;
-    $this->email=$email;
-    $this->passworde=$passworde;
-    $this->createAt=new DateTime();
-    $this->urlphoto = $urlphoto;
-    $this->biographie=$biographie;
-}
-public function setusername($username){
-return $this->username=$username;
-}
-public function getid(){
-return $this->id_user;
-}
-public function setid(int $id){
-    $this->id_user=$id;
-}
-public function getusername(){
-return $this->username;
-}
-public function getemail(){
-return $this->email;
-}
-public function getpassworde(){
-return $this->passworde;
-}
-public function geturlphoto(){
-return $this->urlphoto;
-}
-public function getbiographie(){
-return $this->biographie;
-}
-        public function affichage()
+
+
+abstract class User
+{
+    protected ?int $id_user = null;
+    protected string $username;
+    protected string $email;
+    protected string $password;
+    protected DateTimeInterface $createdAt;
+
+    public function __construct(string $username, string $email, string $password)
     {
-        return "ID:{$this->id_user} <br>username: {$this->username}<br>email: ({$this->email})<br>";
+        $this->username  = $username;
+        $this->email     = $email;
+        $this->password  = password_hash($password, PASSWORD_BCRYPT);
+        $this->createdAt = new DateTimeImmutable();
     }
- 
 
+    
+    public function getId(): ?int
+    {
+        return $this->id_user;
+    }
+
+    public function getUsername(): string
+    {
+        return $this->username;
+    }
+
+    public function getEmail(): string
+    {
+        return $this->email;
+    }
+
+    public function getPassword(): string
+    {
+        return $this->password;
+    }
+
+    public function getCreatedAt(): DateTimeInterface
+    {
+        return $this->createdAt;
+    }
+
+    
+    public function setId(int $id): void
+    {
+        $this->id_user = $id;
+    }
+
+    public function setUsername(string $username): void
+    {
+        $this->username = $username;
+    }
+
+    
+    public function affichage(): string
+    {
+        return "ID: " . ($this->id_user ?? 'non défini') .
+               " | Username: {$this->username} | Email: {$this->email}";
+    }
 }
-
-
-?>

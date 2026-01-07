@@ -1,4 +1,8 @@
 <?php 
+
+
+namespace App\Traits;
+
 trait TaggableTrait{
     protected $tag=[];
     protected $tagsloaded=false;

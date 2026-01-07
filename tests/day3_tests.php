@@ -8,8 +8,13 @@ $userRepo = new UserRepo($pdo);
 echo "Tester une méthode Creation d'un user :<br>";
 $user = new BasicUser('aicha', 'aicha@mail.com','123');
 echo "un nouveux utilisateur : " . $user->affichage() . "<br>";
-$userRepo->create($user);
-echo "l'ajoute d'un utilisateur : " . $user->affichage() . "<br>";
+try {
+    $userRepo->create($user);
+    echo "Utilisateur créé avec succès !";
+} catch (Exception $e) {
+    echo "Erreur : " . $e->getMessage();
+}
+
 echo "ID attribué : " . $user->getid() . "<br>";
 
 echo "Tester une méthode findById : 1 <br>";
@@ -21,8 +26,13 @@ if ($user) {
 }
 echo "Tester une méthode update user:  <br>";
 $user->setusername("aicha");
-$userRepo->update($user);
-echo "<br>Utilisateur modifier : " . $user->affichage() . "\n";
+try {
+    $userRepo->update($user);
+    echo "Utilisateur mis à jour !";
+} catch (Exception $e) {
+    echo "Erreur : " . $e->getMessage();
+}
+
 
 echo "Tester une méthode findall :  <br>";
 $allUsers = $userRepo->findall();

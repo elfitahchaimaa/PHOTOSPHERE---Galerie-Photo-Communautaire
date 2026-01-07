@@ -1,6 +1,6 @@
 <?php 
 require_once __DIR__.'/RepositoryInterface.php';
-require_once __DIR__.'/../Entities/user.php';
+require_once __DIR__.'/../Entities/User.php';
 require_once __DIR__.'/../Database/Database.php';
 require_once __DIR__.'/../Entities/BasicUser.php';
 require_once __DIR__.'/../Entities/ProUser.php';
@@ -14,56 +14,83 @@ class UserRepo implements RepositoryInterface {
     public function __construct(){
         $this->pdo = Database::getConnection();
     }
-    public function findall(): array
+
+    public function findAll(): array
     {
-        $stmt=$this->pdo->query("select * from users");
-        $users=[];
-        while($row=$stmt->fetch()){
-            $users[]=UserFactory::checkrole($row);
+        $stmt = $this->pdo->query("SELECT * FROM users");
+        $users = [];
+
+        while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+            $users[] = UserFactory::checkRole($row);
         }
+
         return $users;
     }
- public function create($user){
-    $stmt=$this->pdo->prepare("insert into utilisateur(username,email,passworde,createdAt,lastLogin,urlphoto,biographie,uploadCount)
-    values(:username,:email,:passworde,:createdAt,:lastLogin,:urlphoto,:biographie,:uploadCount)");
-    $stmt->execute(['username'=>$user->getusername(),
-                    'email'=>$user->getemail(),
-                    'passworde'=>$user->getpassworde(),
-                    'createdAt' => $user->getcreateAt() ? $user->getCreateAt()->format('Y-m-d H:i:s') : null,
-                    'lastLogin' => $user->getlastLogin() ? $user->getlastLogin()->format('Y-m-d H:i:s') : null,
-                    'urlphoto'=>$user->geturlphoto(),
-                    'biographie'=>$user->getbiographie(),
-                    'uploadCount'=>$user->getuploadCount()
-                    ]);                 
-}
 
-   public function findById(int $id){
-        $stmt=$this->pdo->prepare("select * from users where id_user=:id");
-        $stmt->execute(['id'=>$id]);
-        $row=$stmt->fetch();
-
-    if($row){
-        return $user=UserFactory::checkrole($row);
+public function create(User $user): bool
+{
+    $stmt = $this->pdo->prepare("SELECT COUNT(*) FROM users WHERE username = :username");
+    $stmt->execute(['username' => $user->getUsername()]);
+    if ($stmt->fetchColumn() > 0) {
+        throw new Exception("Username '{$user->getUsername()}' déjà utilisé !");
     }
-    else{
-        return null;
-    }}
-    public function update($user):bool{
-                $stmt=$this->pdo->prepare("update users set username=:username,email=:email,passworde=:passworde,urlphoto=:urlphoto,biographie=:biographie where id_user=:id_user");
-                return $stmt->execute([
-                    'username'=>$user->getusername(),
-                    'email'=>$user->getemail(),
-                    'passworde'=>$user->getpassworde(),
-                    'urlphoto'=>$user->geturlphoto(),
-                    'biographie'=>$user->getbiographie(),
-                    'id_user'=>$user->getid()
-                    ]);
+
+    $stmt = $this->pdo->prepare(
+        "INSERT INTO users(username,email,password) VALUES(:username,:email,:password)"
+    );
+
+    return $stmt->execute([
+        'username' => $user->getUsername(),
+        'email'    => $user->getEmail(),
+        'password' => $user->getPassword()
+    ]);
 }
 
-public function delete($user):bool{
-        $stmt=$this->pdo->prepare("delete from users where id_user=:id");
-        return $stmt->execute(['id'=>$user->getid()]);
-}
+
+    public function findById(int $id): ?User
+    {
+        $stmt = $this->pdo->prepare("SELECT * FROM users WHERE id = :id");
+        $stmt->execute(['id' => $id]);
+
+        $row = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        return $row ? UserFactory::checkRole($row) : null;
+    }
+
+public function update($user): bool
+{
+  
+    $stmt = $this->pdo->prepare(
+        "SELECT COUNT(*) FROM users WHERE username = :username AND id != :id"
+    );
+    $stmt->execute([
+        'username' => $user->getUsername(),
+        'id'       => $user->getId()
+    ]);
+
+    if ($stmt->fetchColumn() > 0) {
+        throw new Exception("Username '{$user->getUsername()}' déjà utilisé !");
+    }
+
+    $stmt = $this->pdo->prepare(
+        "UPDATE users 
+         SET username = :username, email = :email, password = :password
+         WHERE id = :id"
+    );
+
+    return $stmt->execute([
+        'username' => $user->getUsername(),
+        'email'    => $user->getEmail(),
+        'password' => $user->getPassword(),
+        'id'       => $user->getId()
+    ]);
 }
 
+
+    public function delete( $user): bool
+    {
+        $stmt = $this->pdo->prepare("DELETE FROM users WHERE id_user = :id");
+        return $stmt->execute(['id' => $user->getId()]);
+    }
+}
 ?>

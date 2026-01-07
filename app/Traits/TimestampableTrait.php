@@ -1,4 +1,8 @@
 <?php
+
+
+namespace App\Traits;
+
 use DateTimeImmutable;
 use DateTimeInterface;
 
