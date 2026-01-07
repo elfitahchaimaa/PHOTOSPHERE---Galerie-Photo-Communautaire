@@ -18,6 +18,9 @@ public function __construct($username,$email,$passworde,$urlphoto=null,$biograph
     $this->urlphoto = $urlphoto;
     $this->biographie=$biographie;
 }
+public function setusername($username){
+return $this->username=$username;
+}
 public function getid(){
 return $this->id_user;
 }
@@ -39,7 +42,11 @@ return $this->urlphoto;
 public function getbiographie(){
 return $this->biographie;
 }
-    
+        public function affichage()
+    {
+        return "ID:{$this->id_user} <br>username: {$this->username}<br>email: ({$this->email})<br>";
+    }
+ 
 
 }
 

@@ -23,7 +23,19 @@ class UserRepo implements RepositoryInterface {
         }
         return $users;
     }
-
+ public function create($user){
+    $stmt=$this->pdo->prepare("insert into utilisateur(username,email,passworde,createdAt,lastLogin,urlphoto,biographie,uploadCount)
+    values(:username,:email,:passworde,:createdAt,:lastLogin,:urlphoto,:biographie,:uploadCount)");
+    $stmt->execute(['username'=>$user->getusername(),
+                    'email'=>$user->getemail(),
+                    'passworde'=>$user->getpassworde(),
+                    'createdAt' => $user->getcreateAt() ? $user->getCreateAt()->format('Y-m-d H:i:s') : null,
+                    'lastLogin' => $user->getlastLogin() ? $user->getlastLogin()->format('Y-m-d H:i:s') : null,
+                    'urlphoto'=>$user->geturlphoto(),
+                    'biographie'=>$user->getbiographie(),
+                    'uploadCount'=>$user->getuploadCount()
+                    ]);                 
+}
 
    public function findById(int $id){
         $stmt=$this->pdo->prepare("select * from users where id_user=:id");
